@@ -4,6 +4,7 @@ import datetime as dt
 import panel as pn
 import hvplot.pandas
 from BinomialTreeModel import BinomialTreeModel
+from BlackScholesModel import BlackScholesModel
 from ticker import Ticker
 
 
@@ -53,6 +54,30 @@ def get_options_pricing(pricing_model):
         gspec[0, 0] = pn.Column(ticker, strike_price, risk_free_rate, sigma, exercise_date, number_of_time_steps, button)
         gspec[0, 1:3] = pn.bind(calculate_option_price, button)
         return gspec
+    
+    elif pricing_model == OPTION_PRICING_MODEL.BLACK_SCHOLES.value:
+        button = pn.widgets.Button(name="Calculate Option Price")
+        
+        def calculate_option_price2(event):
+            """Calculate the option price using Black-Scholes Model."""
+            if event:
+                historical_data = get_historical_data(ticker.value)
+                spot_price = Ticker.get_last_price(historical_data, "Close")
+                black_scholes_model = BlackScholesModel(spot_price, strike_price.value, (exercise_date.value - dt.date.today()).days, risk_free_rate.value, sigma.value)
+                tabulator = pn.widgets.Tabulator(historical_data, pagination="remote", page_size=10, disabled = True, width=800)
+                plot = historical_data.hvplot.line(x='Date', y='Close', title=f'{ticker.value} Stock Price', width=800, height=400)
+                call_option_price = black_scholes_model.calculate_option_price("Call")
+                put_option_price = black_scholes_model.calculate_option_price("Put")
+                return pn.Column(tabulator, plot, pn.pane.Markdown(f"Call Option Price: {call_option_price}"), pn.pane.Markdown(f"Put Option Price: {put_option_price}"))
+            else:
+                return pn.pane.Markdown("Click the button to calculate the option price.")
+        
+        gspec = pn.GridSpec(sizing_mode='stretch_both', max_height=500)
+        gspec[0, 0] = pn.Column(ticker, strike_price, risk_free_rate, sigma, exercise_date, button)
+        gspec[0, 1:3] = pn.bind(calculate_option_price2, button)
+        return gspec
+        
+
 
     
 
