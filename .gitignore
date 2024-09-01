@@ -1,7 +1,8 @@
 .vscode/
 __pycache__
 virtualenv
-venv
+.venv
+
 
 # Files to ignore
 *.pyc

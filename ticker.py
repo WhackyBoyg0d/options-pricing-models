@@ -1,7 +1,6 @@
 import datetime
 
 import requests_cache
-import matplotlib.pyplot as plt
 import yfinance as yf
 
 
@@ -69,28 +68,6 @@ class Ticker:
         if column_name not in Ticker.get_columns(data):
             return None
         return data[column_name][-1]
-    
-    @staticmethod
-    def plot_data(data, ticker, column_name):
-        """
-        Plot the stock data.
-
-        :param data: Stock data
-        :param ticker: Stock symbol
-        :param column_name: Column name for the stock data
-        """
-
-        try:
-            if data is None:
-                return
-            data[column_name].plot(figsize=(10, 7), title=f" Historical data for {ticker} - {column_name}")
-            plt.ylabel(column_name)
-            plt.xlabel("Date")
-            plt.legend(loc = "best")
-            plt.show()
-        except Exception as e:
-            print(f"Error plotting data for {ticker}: {e}")
-            return 
 
 
 

@@ -18,7 +18,7 @@ class BlackScholesModel(OptionPricingModel):
     def __init__(self, spot_price, strike_price, time_to_maturity, risk_free_rate, volatility):
         self.spot_price = spot_price
         self.strike_price = strike_price
-        self.time_to_maturity = time_to_maturity
+        self.time_to_maturity = time_to_maturity / 365
         self.risk_free_rate = risk_free_rate
         self.volatility = volatility
     

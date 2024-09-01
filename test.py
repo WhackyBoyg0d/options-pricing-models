@@ -1,4 +1,3 @@
-import pandas_datareader as pdr
 import requests_cache
 from datetime import datetime as dt
 import yfinance as yf
